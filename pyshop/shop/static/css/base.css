@@ -1,0 +1,17 @@
+/* Minimal custom styles to complement Tailwind */
+.logo {
+    letter-spacing: -0.02em;
+}
+
+/* Utility tweaks for legacy elements if rendered without Tailwind classes */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+}
+
+

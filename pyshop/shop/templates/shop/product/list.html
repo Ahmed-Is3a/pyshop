@@ -4,31 +4,43 @@
   {% if category %}{{ category.name }}{% else %}Products{% endif %}
  {% endblock %}
  {% block content %}
- <div id="sidebar">
- <h3>Categories</h3>
- <ul>
- <li {% if not category %}class="selected"{% endif %}>
- <a href="{% url "shop:product_list" %}">All</a>
- </li>
-      {% for c in categories %}
- <li {% if category.slug == c.slug %}class="selected"{% endif %}>
- <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
- </li>
-      {% endfor %}
- </ul>
- </div>
- <div id="main" class="product-list">
- <h1>{% if category %}{{ category.name }}{% else %}Products
-    {% endif %}</h1>
-    {% for product in products %}
- <div class="item">
- <a href="{{ product.get_absolute_url }}">
- <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
- </a>
- <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
- <br>
-        ${{ product.price }}
- </div>
-    {% endfor %}
- </div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <aside id="sidebar" class="lg:col-span-3">
+        <div class="bg-white border rounded-lg shadow-sm p-4 sticky top-6">
+            <h3 class="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-3">Categories</h3>
+            <ul class="space-y-1">
+                <li class="{% if not category %}font-semibold text-slate-900{% else %}text-slate-600{% endif %}">
+                    <a class="block px-2 py-1 rounded hover:bg-slate-50" href="{% url 'shop:product_list' %}">All</a>
+                </li>
+                {% for c in categories %}
+                <li class="{% if category.slug == c.slug %}font-semibold text-slate-900{% else %}text-slate-600{% endif %}">
+                    <a class="block px-2 py-1 rounded hover:bg-slate-50" href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </aside>
+
+    <main id="main" class="lg:col-span-9">
+        <div class="flex items-end justify-between mb-6">
+            <h1 class="text-2xl font-bold text-slate-900">
+                {% if category %}{{ category.name }}{% else %}Products{% endif %}
+            </h1>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for product in products %}
+            <div class="bg-white border rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                <a href="{{ product.get_absolute_url }}" class="block">
+                    <img class="w-full aspect-[4/3] object-cover" alt="{{ product.name }}" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
+                </a>
+                <div class="p-3">
+                    <a href="{{ product.get_absolute_url }}" class="block text-slate-900 font-medium truncate">{{ product.name }}</a>
+                    <div class="mt-1 text-sky-600 font-semibold">${{ product.price }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</div>
  {% endblock %}

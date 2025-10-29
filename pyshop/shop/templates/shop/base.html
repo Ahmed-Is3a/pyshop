@@ -4,20 +4,30 @@
 
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}My shop{% endblock %}</title>
-    <link href="{% static " css/base.css" %}" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
 </head>
 
 <body>
-    <div id="header">
-        <a href="/" class="logo">My shop</a>
-    </div>
-    <div id="subheader">
-        <div class="cart">
-            Your cart is empty.
+    <div id="header" class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <a href="/" class="logo text-xl font-bold tracking-tight text-slate-900">My shop</a>
+            <nav class="hidden sm:flex items-center gap-6 text-sm text-slate-600">
+                <a href="/" class="hover:text-slate-900">Home</a>
+                <a href="{% url 'shop:product_list' %}" class="hover:text-slate-900">Products</a>
+            </nav>
         </div>
     </div>
-    <div id="content">
+    <div id="subheader" class="bg-sky-50 border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-end">
+            <div class="cart text-sm text-slate-700">
+                Your cart is empty.
+            </div>
+        </div>
+    </div>
+    <div id="content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {% block content %}
         {% endblock %}
     </div>
