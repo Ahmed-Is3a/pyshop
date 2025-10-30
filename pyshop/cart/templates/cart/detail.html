@@ -1,0 +1,168 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}
+  Your shopping cart
+{% endblock %}
+{% block content %}
+<div class="cart-wrap">
+  <h1 class="cart-title">🛒 Your Shopping Cart</h1>
+  <table class="cart-table">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Remove</th>
+        <th>Unit Price</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart %}
+        {% with product=item.product %}
+        <tr>
+          <td>
+            <a href="{{ product.get_absolute_url }}">
+              <img class="cart-product-img" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}" />
+            </a>
+          </td>
+          <td class="cart-product-name">{{ product.name }}</td>
+          <td>
+            <form action="{% url 'cart:cart_add' product.id %}" method="post" class="cart-update-form">
+              {{ item.update_quantity_form.quantity }}
+              {{ item.update_quantity_form.override }}
+              {% csrf_token %}
+              <button type="submit" class="btn-update" title="Update quantity">Update</button>
+            </form>
+          </td>
+          <td>
+            <form action="{% url 'cart:cart_remove' product.id %}" method="post" class="cart-remove-form">
+              {% csrf_token %}
+              <button type="submit" class="btn-remove" title="Remove from cart">✖</button>
+            </form>
+          </td>
+          <td class="num">${{ item.price }}</td>
+          <td class="num">${{ item.total_price }}</td>
+        </tr>
+        {% endwith %}
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr class="cart-total-row">
+        <td colspan="5" class="total-label">Total</td>
+        <td class="num total-amount">${{ cart.get_total_price }}</td>
+      </tr>
+    </tfoot>
+  </table>
+  <div class="cart-actions">
+    <a href="{% url 'shop:product_list' %}" class="button light btn-continue">← Continue Shopping</a>
+    <a href="#" class="button btn-checkout">Checkout →</a>
+  </div>
+</div>
+<style>
+.cart-wrap {
+  max-width: 950px;
+  margin: 2.5em auto;
+  background: #fff;
+  box-shadow: 0 3px 16px #e3e7ee;
+  border-radius: 9px;
+  padding: 2.2em 1.5em;
+}
+.cart-title {
+  text-align: center;
+  margin-bottom: 1.4em;
+  font-size: 2.2em;
+  color: #222d4a;
+}
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.7em;
+  background: #fafdff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.cart-table th, .cart-table td {
+  padding: 1em 0.5em;
+  text-align: center;
+  border-bottom: 1px solid #e4eaf2;
+}
+.cart-table th {
+  background: #e4eaf2;
+  color: #263a4f;
+}
+.cart-product-img {
+  max-width: 68px;
+  max-height: 68px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px #cacbce;
+}
+.cart-product-name {
+  font-weight: 600;
+  color: #264f6b;
+}
+.cart-update-form input[type="number"], .cart-update-form select {
+  width: 45px;
+  padding: 0.25em;
+  border-radius: 4px;
+  border: 1px solid #cfd8e3;
+}
+.btn-update {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4em 1.1em;
+  margin-left: 0.3em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.19s;
+}
+.btn-update:hover {background: #2563eb;}
+.btn-remove {
+  background: #ff4757;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 2.1em;
+  height: 2.1em;
+  font-size: 1.2em;
+  line-height: 2.1em;
+  cursor: pointer;
+  transition: background 0.19s;
+}
+.btn-remove:hover {background: #c82333;}
+.total-label {text-align: right; font-weight: bold; font-size: 1.05em;}
+.total-amount {font-size: 1.2em; color: #10b981; font-weight: bold;}
+.cart-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 1em;
+  margin-top: 2.1em;
+}
+.button {
+  display: inline-block;
+  padding: 0.65em 2em;
+  border-radius: 5px;
+  background: #2563eb;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.20s;
+  font-size: 1em;
+}
+.button.light {background: #e3e8f7; color: #21364b;}
+.button.light:hover {background: #c1cde6; color: #21364b;}
+.btn-checkout {background: #10b981;}
+.btn-checkout:hover {background: #059669;}
+.btn-continue {background: #b8b8b8; color: #222;}
+.btn-continue:hover {background: #9d9d9d;}
+@media (max-width: 700px) {
+  .cart-wrap {padding: 0.7em;}
+  .cart-table th,.cart-table td {padding: 0.45em 0.2em; font-size: 0.97em;}
+  .cart-actions {flex-direction: column; align-items: flex-end;}
+  .button {width: 100%; margin: 0.15em 0;}
+}
+</style>
+{% endblock %}
