@@ -1,0 +1,18 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}
+Checkout
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/order.css' %}">
+<div class="order-form-wrap">
+  <h1 class="order-title">📝 Checkout</h1>
+  <p class="order-instructions">Please complete the information below to finish your order.</p>
+  <form method="post" class="styled-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="order-submit-btn">Place Order</button>
+  </form>
+</div>
+{% endblock %}
+ 
